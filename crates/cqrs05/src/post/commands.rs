@@ -1,21 +1,38 @@
-#[derive(rtm::Command)]
+// Use `validator` crate for validations
+#[derive(rtm::Create)]
+#[rtm(relation = Posts)] // Could also point to an aggregate or in ROM parlance a Repository
+                         // By stipulating String rust ensures a value is provided - no validate required
 struct AddPost {
-  author: String,
-  title: String,
-  content: String
+    author: String,
+    title: String,
+    content: String,
 }
 
-// Implements:
-// impl rtm::Command for AddPost {}
+// If no function `publish_post` is defined, we implement::
+// impl rtm::Create for AddPost {
+//     fn add_post(self: Self){
+//        self.create() // This is the default command for the adapter used by the relation Posts
+//     }
+// }
 
-// `validates_presence_of` may not be required due to Rust properties/design?
-AddPost::validates_presence_of!(fields = []);
+#[derive(rtm::Create)]
+#[rtm(relation = Posts)] // Posts fields are added to this struct
+struct PublishPost;
 
-#[derive(rtm::Command)]
-struct PublishPost {
-    publication_date: DateTime
+// struct PublishPost{
+//   publication_date: DateTime
+// }
+// // If no function `publish_post` is defined, we implement:
+// impl rtm::Create for PublishPost {
+//     fn publish_post(self: Self){
+//        self.create() // This is the default command for the adapter used by the relation Posts
+//     }
+// }
+
+#[derive(rtm::Create)]
+#[rtm(relation = Posts)] // Posts fields are added to this struct
+struct AddPost {
+    author_aggregate_id: String,
+    title: String,
+    content: String,
 }
-
-impl rtm::Command for PublishPost {}
-
-PublishPost::validates_presence_of!(field=publication_date);

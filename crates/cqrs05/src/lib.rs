@@ -1,3 +1,5 @@
+mod blog;
+
 #[cfg(test)]
 mod tests {
     #[test]

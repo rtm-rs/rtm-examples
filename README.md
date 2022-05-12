@@ -17,6 +17,16 @@ Examples for [Rust Type Mapper (RTM)](https://rtm-rs.org).
 
 [https://docs.rs/rtm-examples](https://docs.rs/rtm-examples)
 
+## Idea: derive
+
+For types implementing relations and aggregates (enties+values)
+
+```rust
+#[derive(Relation)] // Relations can exists outside the transitory layer - which is a type
+#[derive(Relation, Transitory)]
+#[derive(Aggregate)]  // i.e. all aggregates exist in the transitory layer - which is a type
+```
+
 ## License
 
 Licensed under either of
