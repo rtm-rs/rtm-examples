@@ -25,15 +25,17 @@ path = "src/lib.rs"
 
 [dependencies]
 anyhow = "1.0.57"
+# rtm = {package = "rtm-rs", version= "0"}
 thiserror = "1.0.30"
 
 [dev-dependencies]
-rtm-devtools = { path = "./../rtm-devtools" }
 aquamarine = "0.1.11"
 criterion = { version = "0.3", features = ["html_reports"] }
 futures = "0.3"
 futures-timer = "3"
 mockall = "0.11"
+rtm = { package = "rtm-rs", version = "0", path = "../../rtm" }
+rtm-devtools = { path = "./../rtm-devtools" }
 trybuild = "1"
 
 [features]
