@@ -1,8 +1,12 @@
 [package]
 name = "cqrs03"
 version = "0.1.0"
+rust_version = "1.56.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = ["entities", "migrations", "rtm"]
 
 [dependencies]
+rtm = "0"
+refinery = { version = "0.8", features = ["postgres"]}

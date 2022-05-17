@@ -1,0 +1,6 @@
+[package]
+name = "entities"
+version = "0.0.1"
+
+[dependencies]
+sea-orm = { version = "^0" }
