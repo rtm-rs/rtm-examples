@@ -21,11 +21,11 @@ version:
 
 ```bash
 export DATABASE_URL="postgres://postgres:secret@localhost:5432/res-ecommerce_development"
-for v in $(ls migration/src/*.sql |cut -d _ -f 1| cut -d V -f 2|xargs echo);
+for v in {1..39..1};
 do
-    echo "Migrating ${v:0:10}"
-    pushd migration/src
-        refinery migrate -p ./ -t ${v:0:10} &>>refinery.log
+    echo "Migrate to version ${v}"
+    pushd migrations
+        refinery migrate -f -e DATABASE_URL -p ./src -t ${v} &>>refinery.log
     popd
     sea-orm-cli generate entity --database-url "${DATABASE_URL}" \
                                 --expanded-format \
@@ -33,6 +33,6 @@ do
                                 --include-hidden-tables \
                                 --output-dir entities/src &>>entity.log
     git add . &>>add.log
-    git commit -m "Evolve[DB]: Migration version ${v:0:10}" &>>commit.log
+    git commit -m "Evolve[DB]: Migrate to version ${v}" &>>commit.log
 done
 ```
