@@ -25,7 +25,7 @@ for v in {1..39..1};
 do
     echo "Migrate to version ${v}"
     pushd migrations
-        refinery migrate -f -e DATABASE_URL -p ./src -t ${v} &>>refinery.log
+        refinery migrate -e DATABASE_URL -p ./src -t ${v} &>>refinery.log
     popd
     sea-orm-cli generate entity --database-url "${DATABASE_URL}" \
                                 --expanded-format \
