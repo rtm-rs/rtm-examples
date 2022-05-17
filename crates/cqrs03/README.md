@@ -24,7 +24,7 @@ export DATABASE_URL="postgres://postgres:secret@localhost:5432/res-ecommerce_dev
 for v in $(ls migration/src/*.sql |cut -d _ -f 1| cut -d V -f 2|xargs echo);
 do
     echo "Migrating ${v:0:10}"
-    pushd migration
+    pushd migration/src
         refinery migrate -p ./ -t ${v:0:10} &>>refinery.log
     popd
     sea-orm-cli generate entity --database-url "${DATABASE_URL}" \
