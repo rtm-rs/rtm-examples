@@ -20,7 +20,7 @@ Moved to the `migration` folder, entity files are generated for each migration
 version:
 
 ```bash
-export DATABASE_URL="postgres://postgres:secret@localhost:5432/res-ecommerce_development?username=postgres&password=secret"
+export DATABASE_URL="postgres://postgres:secret@localhost:5432/res-ecommerce_development"
 for v in $(ls migration/src/*.sql |cut -d _ -f 1| cut -d V -f 2|xargs echo);
 do
     echo "Migrating ${v:0:10}"
