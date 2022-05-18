@@ -6,6 +6,8 @@ pub mod ar_internal_metadata;
 pub mod customers;
 pub mod event_store_events;
 pub mod event_store_events_in_streams;
+pub mod invoice_items;
+pub mod invoices;
 pub mod order_lines;
 pub mod orders;
 pub mod orders_customers;
