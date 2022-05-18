@@ -18,6 +18,7 @@ pub struct Model {
     pub name: Option<String>,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
+    pub uid: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -26,6 +27,7 @@ pub enum Column {
     Name,
     CreatedAt,
     UpdatedAt,
+    Uid,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -51,6 +53,7 @@ impl ColumnTrait for Column {
             Self::Name => ColumnType::String(None).def().null(),
             Self::CreatedAt => ColumnType::Timestamp.def(),
             Self::UpdatedAt => ColumnType::Timestamp.def(),
+            Self::Uid => ColumnType::Uuid.def().null(),
         }
     }
 }
