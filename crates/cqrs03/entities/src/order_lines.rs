@@ -15,21 +15,19 @@ impl EntityName for Entity {
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
     pub id: i64,
-    pub order_uid: Uuid,
+    pub order_uid: Option<String>,
+    pub product_id: Option<i32>,
     pub product_name: Option<String>,
     pub quantity: Option<i32>,
-    pub price: Option<Decimal>,
-    pub product_id: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
     Id,
     OrderUid,
+    ProductId,
     ProductName,
     Quantity,
-    Price,
-    ProductId,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -52,11 +50,10 @@ impl ColumnTrait for Column {
     fn def(&self) -> ColumnDef {
         match self {
             Self::Id => ColumnType::BigInteger.def(),
-            Self::OrderUid => ColumnType::Uuid.def(),
+            Self::OrderUid => ColumnType::String(None).def().null(),
+            Self::ProductId => ColumnType::Integer.def().null(),
             Self::ProductName => ColumnType::String(None).def().null(),
             Self::Quantity => ColumnType::Integer.def().null(),
-            Self::Price => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::ProductId => ColumnType::Uuid.def().null(),
         }
     }
 }
