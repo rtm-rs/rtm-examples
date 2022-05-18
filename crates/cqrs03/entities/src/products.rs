@@ -19,6 +19,7 @@ pub struct Model {
     pub id: Uuid,
     pub stock_level: Option<i32>,
     pub registered_at: Option<DateTimeUtc>,
+    pub vat_rate_code: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -28,6 +29,7 @@ pub enum Column {
     Id,
     StockLevel,
     RegisteredAt,
+    VatRateCode,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -54,6 +56,7 @@ impl ColumnTrait for Column {
             Self::Id => ColumnType::Uuid.def(),
             Self::StockLevel => ColumnType::Integer.def().null(),
             Self::RegisteredAt => ColumnType::Timestamp.def().null(),
+            Self::VatRateCode => ColumnType::String(None).def().null(),
         }
     }
 }
