@@ -16,8 +16,8 @@ impl EntityName for Entity {
 pub struct Model {
     pub id: Uuid,
     pub event_type: String,
-    pub metadata: Option<String>,
-    pub data: String,
+    pub metadata: Option<Vec<u8>>,
+    pub data: Vec<u8>,
     pub created_at: DateTimeUtc,
 }
 
@@ -51,8 +51,8 @@ impl ColumnTrait for Column {
         match self {
             Self::Id => ColumnType::Uuid.def(),
             Self::EventType => ColumnType::String(None).def(),
-            Self::Metadata => ColumnType::Text.def().null(),
-            Self::Data => ColumnType::Text.def(),
+            Self::Metadata => ColumnType::Binary.def().null(),
+            Self::Data => ColumnType::Binary.def(),
             Self::CreatedAt => ColumnType::Timestamp.def(),
         }
     }
