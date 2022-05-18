@@ -19,6 +19,7 @@ pub struct Model {
     pub metadata: Option<Json>,
     pub data: Json,
     pub created_at: DateTimeUtc,
+    pub valid_at: Option<DateTimeUtc>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -28,6 +29,7 @@ pub enum Column {
     Metadata,
     Data,
     CreatedAt,
+    ValidAt,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -54,6 +56,7 @@ impl ColumnTrait for Column {
             Self::Metadata => ColumnType::JsonBinary.def().null(),
             Self::Data => ColumnType::JsonBinary.def(),
             Self::CreatedAt => ColumnType::Timestamp.def(),
+            Self::ValidAt => ColumnType::Timestamp.def().null(),
         }
     }
 }
