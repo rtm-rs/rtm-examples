@@ -6,6 +6,7 @@ pub use super::event_store_events::Entity as EventStoreEvents;
 pub use super::event_store_events_in_streams::Entity as EventStoreEventsInStreams;
 pub use super::invoice_items::Entity as InvoiceItems;
 pub use super::invoices::Entity as Invoices;
+pub use super::invoices_orders::Entity as InvoicesOrders;
 pub use super::order_lines::Entity as OrderLines;
 pub use super::orders::Entity as Orders;
 pub use super::orders_customers::Entity as OrdersCustomers;

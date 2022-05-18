@@ -8,6 +8,7 @@ pub mod event_store_events;
 pub mod event_store_events_in_streams;
 pub mod invoice_items;
 pub mod invoices;
+pub mod invoices_orders;
 pub mod order_lines;
 pub mod orders;
 pub mod orders_customers;
