@@ -8,6 +8,7 @@ pub mod event_store_events;
 pub mod event_store_events_in_streams;
 pub mod order_lines;
 pub mod orders;
+pub mod orders_customers;
 pub mod orders_products;
 pub mod products;
 pub mod refinery_schema_history;
