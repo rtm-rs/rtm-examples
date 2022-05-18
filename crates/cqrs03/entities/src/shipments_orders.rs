@@ -8,7 +8,7 @@ pub struct Entity;
 
 impl EntityName for Entity {
     fn table_name(&self) -> &str {
-        "orders"
+        "shipments_orders"
     }
 }
 
@@ -16,24 +16,14 @@ impl EntityName for Entity {
 pub struct Model {
     pub id: i64,
     pub uid: Uuid,
-    pub number: Option<String>,
-    pub customer: Option<String>,
-    pub state: Option<String>,
-    pub percentage_discount: Option<Decimal>,
-    pub total_value: Option<Decimal>,
-    pub discounted_value: Option<Decimal>,
+    pub submitted: Option<bool>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
     Id,
     Uid,
-    Number,
-    Customer,
-    State,
-    PercentageDiscount,
-    TotalValue,
-    DiscountedValue,
+    Submitted,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -57,12 +47,7 @@ impl ColumnTrait for Column {
         match self {
             Self::Id => ColumnType::BigInteger.def(),
             Self::Uid => ColumnType::Uuid.def(),
-            Self::Number => ColumnType::String(None).def().null(),
-            Self::Customer => ColumnType::String(None).def().null(),
-            Self::State => ColumnType::String(None).def().null(),
-            Self::PercentageDiscount => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::TotalValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::DiscountedValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::Submitted => ColumnType::Boolean.def().null(),
         }
     }
 }

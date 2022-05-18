@@ -8,32 +8,30 @@ pub struct Entity;
 
 impl EntityName for Entity {
     fn table_name(&self) -> &str {
-        "orders"
+        "client_orders"
     }
 }
 
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
     pub id: i64,
-    pub uid: Uuid,
+    pub client_uid: Option<Uuid>,
     pub number: Option<String>,
-    pub customer: Option<String>,
+    pub order_uid: Option<Uuid>,
     pub state: Option<String>,
-    pub percentage_discount: Option<Decimal>,
-    pub total_value: Option<Decimal>,
-    pub discounted_value: Option<Decimal>,
+    pub created_at: DateTimeUtc,
+    pub updated_at: DateTimeUtc,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
     Id,
-    Uid,
+    ClientUid,
     Number,
-    Customer,
+    OrderUid,
     State,
-    PercentageDiscount,
-    TotalValue,
-    DiscountedValue,
+    CreatedAt,
+    UpdatedAt,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -56,13 +54,12 @@ impl ColumnTrait for Column {
     fn def(&self) -> ColumnDef {
         match self {
             Self::Id => ColumnType::BigInteger.def(),
-            Self::Uid => ColumnType::Uuid.def(),
+            Self::ClientUid => ColumnType::Uuid.def().null(),
             Self::Number => ColumnType::String(None).def().null(),
-            Self::Customer => ColumnType::String(None).def().null(),
+            Self::OrderUid => ColumnType::Uuid.def().null(),
             Self::State => ColumnType::String(None).def().null(),
-            Self::PercentageDiscount => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::TotalValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::DiscountedValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::CreatedAt => ColumnType::Timestamp.def(),
+            Self::UpdatedAt => ColumnType::Timestamp.def(),
         }
     }
 }

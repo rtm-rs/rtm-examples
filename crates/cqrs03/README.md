@@ -21,7 +21,7 @@ version:
 
 ```bash
 export DATABASE_URL="postgres://postgres:secret@localhost:5432/res-ecommerce_development"
-for v in {1..39..1};
+for v in {0..38..1};
 do
     echo "Migrate to version ${v}"
     pushd migrations

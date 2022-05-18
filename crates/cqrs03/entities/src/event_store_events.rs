@@ -8,32 +8,30 @@ pub struct Entity;
 
 impl EntityName for Entity {
     fn table_name(&self) -> &str {
-        "orders"
+        "event_store_events"
     }
 }
 
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
-    pub id: i64,
-    pub uid: Uuid,
-    pub number: Option<String>,
-    pub customer: Option<String>,
-    pub state: Option<String>,
-    pub percentage_discount: Option<Decimal>,
-    pub total_value: Option<Decimal>,
-    pub discounted_value: Option<Decimal>,
+    pub event_id: Uuid,
+    pub event_type: String,
+    pub metadata: Option<Json>,
+    pub data: Json,
+    pub created_at: DateTimeUtc,
+    pub valid_at: Option<DateTimeUtc>,
+    pub id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
+    EventId,
+    EventType,
+    Metadata,
+    Data,
+    CreatedAt,
+    ValidAt,
     Id,
-    Uid,
-    Number,
-    Customer,
-    State,
-    PercentageDiscount,
-    TotalValue,
-    DiscountedValue,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -42,7 +40,7 @@ pub enum PrimaryKey {
 }
 
 impl PrimaryKeyTrait for PrimaryKey {
-    type ValueType = i64;
+    type ValueType = i32;
     fn auto_increment() -> bool {
         true
     }
@@ -55,14 +53,13 @@ impl ColumnTrait for Column {
     type EntityName = Entity;
     fn def(&self) -> ColumnDef {
         match self {
-            Self::Id => ColumnType::BigInteger.def(),
-            Self::Uid => ColumnType::Uuid.def(),
-            Self::Number => ColumnType::String(None).def().null(),
-            Self::Customer => ColumnType::String(None).def().null(),
-            Self::State => ColumnType::String(None).def().null(),
-            Self::PercentageDiscount => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::TotalValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
-            Self::DiscountedValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::EventId => ColumnType::Uuid.def(),
+            Self::EventType => ColumnType::String(None).def(),
+            Self::Metadata => ColumnType::JsonBinary.def().null(),
+            Self::Data => ColumnType::JsonBinary.def(),
+            Self::CreatedAt => ColumnType::Timestamp.def(),
+            Self::ValidAt => ColumnType::Timestamp.def().null(),
+            Self::Id => ColumnType::Integer.def(),
         }
     }
 }
