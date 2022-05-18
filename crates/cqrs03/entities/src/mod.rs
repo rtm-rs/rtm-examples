@@ -6,5 +6,6 @@ pub mod ar_internal_metadata;
 pub mod customers;
 pub mod order_lines;
 pub mod orders;
+pub mod products;
 pub mod refinery_schema_history;
 pub mod schema_migrations;
