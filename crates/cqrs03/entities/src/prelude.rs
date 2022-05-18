@@ -15,3 +15,4 @@ pub use super::products::Entity as Products;
 pub use super::refinery_schema_history::Entity as RefinerySchemaHistory;
 pub use super::schema_migrations::Entity as SchemaMigrations;
 pub use super::shipments::Entity as Shipments;
+pub use super::shipments_orders::Entity as ShipmentsOrders;

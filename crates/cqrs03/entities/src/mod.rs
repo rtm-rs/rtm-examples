@@ -17,3 +17,4 @@ pub mod products;
 pub mod refinery_schema_history;
 pub mod schema_migrations;
 pub mod shipments;
+pub mod shipments_orders;
