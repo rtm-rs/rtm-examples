@@ -9,7 +9,5 @@ name = "migration"
 path = "src/lib.rs"
 
 [dependencies]
-entity = { path = "../entity" }
-
-[dependencies.sea-orm-migration]
-version = "^0.8.0"
+entity = { path = "../entities" }
+sea-orm-migration = "^0.8.0"

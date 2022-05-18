@@ -5,7 +5,9 @@ rust_version = "1.56.0"
 edition = "2021"
 
 [workspace]
-members = ["entities", "migrations", "rtm"]
+members = ["entities",
+ "migrations",
+ "rtm"]
 
 [dependencies]
 rtm = "0"
