@@ -19,6 +19,7 @@ pub struct Model {
     pub product_id: Option<i32>,
     pub product_name: Option<String>,
     pub quantity: Option<i32>,
+    pub price: Option<Decimal>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -28,6 +29,7 @@ pub enum Column {
     ProductId,
     ProductName,
     Quantity,
+    Price,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -54,6 +56,7 @@ impl ColumnTrait for Column {
             Self::ProductId => ColumnType::Integer.def().null(),
             Self::ProductName => ColumnType::String(None).def().null(),
             Self::Quantity => ColumnType::Integer.def().null(),
+            Self::Price => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
         }
     }
 }
