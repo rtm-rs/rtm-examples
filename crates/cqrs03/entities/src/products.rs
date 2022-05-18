@@ -19,6 +19,7 @@ pub struct Model {
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
     pub price: Option<Decimal>,
+    pub uid: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -28,6 +29,7 @@ pub enum Column {
     CreatedAt,
     UpdatedAt,
     Price,
+    Uid,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -54,6 +56,7 @@ impl ColumnTrait for Column {
             Self::CreatedAt => ColumnType::Timestamp.def(),
             Self::UpdatedAt => ColumnType::Timestamp.def(),
             Self::Price => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::Uid => ColumnType::Uuid.def().null(),
         }
     }
 }
