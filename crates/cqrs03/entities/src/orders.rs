@@ -19,6 +19,9 @@ pub struct Model {
     pub number: Option<String>,
     pub customer: Option<String>,
     pub state: Option<String>,
+    pub percentage_discount: Option<Decimal>,
+    pub total_value: Option<Decimal>,
+    pub discounted_value: Option<Decimal>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
@@ -28,6 +31,9 @@ pub enum Column {
     Number,
     Customer,
     State,
+    PercentageDiscount,
+    TotalValue,
+    DiscountedValue,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -54,6 +60,9 @@ impl ColumnTrait for Column {
             Self::Number => ColumnType::String(None).def().null(),
             Self::Customer => ColumnType::String(None).def().null(),
             Self::State => ColumnType::String(None).def().null(),
+            Self::PercentageDiscount => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::TotalValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
+            Self::DiscountedValue => ColumnType::Decimal(Some((8u32, 2u32))).def().null(),
         }
     }
 }
