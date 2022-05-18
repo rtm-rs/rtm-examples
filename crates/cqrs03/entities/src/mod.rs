@@ -3,6 +3,7 @@
 pub mod prelude;
 
 pub mod ar_internal_metadata;
+pub mod client_orders;
 pub mod clients;
 pub mod customers;
 pub mod event_store_events;
