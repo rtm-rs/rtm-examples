@@ -15,7 +15,7 @@ impl EntityName for Entity {
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
     pub id: i64,
-    pub uid: Option<String>,
+    pub uid: Uuid,
     pub number: Option<String>,
     pub customer: Option<String>,
     pub state: Option<String>,
@@ -56,7 +56,7 @@ impl ColumnTrait for Column {
     fn def(&self) -> ColumnDef {
         match self {
             Self::Id => ColumnType::BigInteger.def(),
-            Self::Uid => ColumnType::String(None).def().null(),
+            Self::Uid => ColumnType::Uuid.def(),
             Self::Number => ColumnType::String(None).def().null(),
             Self::Customer => ColumnType::String(None).def().null(),
             Self::State => ColumnType::String(None).def().null(),
