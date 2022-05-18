@@ -14,22 +14,24 @@ impl EntityName for Entity {
 
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
-    pub id: Uuid,
+    pub event_id: Uuid,
     pub event_type: String,
     pub metadata: Option<Json>,
     pub data: Json,
     pub created_at: DateTimeUtc,
     pub valid_at: Option<DateTimeUtc>,
+    pub id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
-    Id,
+    EventId,
     EventType,
     Metadata,
     Data,
     CreatedAt,
     ValidAt,
+    Id,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -38,9 +40,9 @@ pub enum PrimaryKey {
 }
 
 impl PrimaryKeyTrait for PrimaryKey {
-    type ValueType = Uuid;
+    type ValueType = i32;
     fn auto_increment() -> bool {
-        false
+        true
     }
 }
 
@@ -51,12 +53,13 @@ impl ColumnTrait for Column {
     type EntityName = Entity;
     fn def(&self) -> ColumnDef {
         match self {
-            Self::Id => ColumnType::Uuid.def(),
+            Self::EventId => ColumnType::Uuid.def(),
             Self::EventType => ColumnType::String(None).def(),
             Self::Metadata => ColumnType::JsonBinary.def().null(),
             Self::Data => ColumnType::JsonBinary.def(),
             Self::CreatedAt => ColumnType::Timestamp.def(),
             Self::ValidAt => ColumnType::Timestamp.def().null(),
+            Self::Id => ColumnType::Integer.def(),
         }
     }
 }
