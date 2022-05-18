@@ -14,22 +14,18 @@ impl EntityName for Entity {
 
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
 pub struct Model {
+    pub id: i64,
     pub name: Option<String>,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
-    pub id: Uuid,
-    pub registered_at: Option<DateTimeUtc>,
-    pub vip: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
+    Id,
     Name,
     CreatedAt,
     UpdatedAt,
-    Id,
-    RegisteredAt,
-    Vip,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey)]
@@ -38,9 +34,9 @@ pub enum PrimaryKey {
 }
 
 impl PrimaryKeyTrait for PrimaryKey {
-    type ValueType = Uuid;
+    type ValueType = i64;
     fn auto_increment() -> bool {
-        false
+        true
     }
 }
 
@@ -51,12 +47,10 @@ impl ColumnTrait for Column {
     type EntityName = Entity;
     fn def(&self) -> ColumnDef {
         match self {
+            Self::Id => ColumnType::BigInteger.def(),
             Self::Name => ColumnType::String(None).def().null(),
             Self::CreatedAt => ColumnType::Timestamp.def(),
             Self::UpdatedAt => ColumnType::Timestamp.def(),
-            Self::Id => ColumnType::Uuid.def(),
-            Self::RegisteredAt => ColumnType::Timestamp.def().null(),
-            Self::Vip => ColumnType::Boolean.def(),
         }
     }
 }
