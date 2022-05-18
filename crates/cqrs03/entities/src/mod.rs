@@ -2,7 +2,6 @@
 
 pub mod prelude;
 
-pub mod active_admin_comments;
 pub mod ar_internal_metadata;
 pub mod customers;
 pub mod event_store_events;
