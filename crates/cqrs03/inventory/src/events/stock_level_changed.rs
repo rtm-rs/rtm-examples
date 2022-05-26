@@ -1,14 +1,9 @@
-#[derive(Event)]
-#[rtm(commands=[Update])]
-enum StockLevel {}
-
-// implements
-// type StockLevelCreated = aggregates::StockLevel;
-// type StockLevelDeleted = aggregates::StockLevel;
-type StockLevelUpdated = aggregates::StockLevel;
-
-enum StockLevel {
-    // Created(StockLevelCreated),
-    // Deleted(StockLevelDeleted),
-    Updated(StockLevelUpdated),
-}
+// Was `stock_level_changed.rb` moved to `./inventory_entry.rs`
+// Events are defined by aggregates and commands.
+// Events only apply to an aggregate, and there are only three commands
+// that change the state of an aggregate: create, delete and update.
+//
+// module Inventory
+//   class StockLevelChanged < Infra::Event
+//   end
+// end
