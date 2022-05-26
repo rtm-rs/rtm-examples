@@ -1,10 +1,9 @@
+use eventually::{aggregate, aggregate::Root as AggregateRoot, message};
+use rust_decimal::Decimal;
 use std::{
     borrow::{Borrow, BorrowMut},
     collections::HashMap,
 };
-
-use eventually::{aggregate, aggregate::Root as AggregateRoot, message};
-use rust_decimal::Decimal;
 
 pub type BankAccountRepository<S> =
     aggregate::EventSourcedRepository<BankAccount, BankAccountRoot, S>;

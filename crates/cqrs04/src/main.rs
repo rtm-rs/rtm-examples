@@ -3,7 +3,7 @@ use std::time::Duration;
 use anyhow::anyhow;
 use eventually::test;
 
-use bank_accounting::{application, domain::BankAccountRepository, grpc, proto};
+use cqrs04::{application, domain::BankAccountRepository, grpc, proto};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
