@@ -19,7 +19,7 @@ We'll use gRPCui to interact with the service:
 ```bash
 podman run -it --rm --network="host" \
            -v $(pwd)/proto:/protos \
-           -eGRPCUI_SERVER=0.0.0.0:10437 \
+           -eGRPCUI_SERVER=localhost:10437 \
            -p8091:8080 \
            fullstorydev/grpcui localhost:10437
 ```
