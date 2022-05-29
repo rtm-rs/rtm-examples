@@ -1,0 +1,16 @@
+[package]
+name = "mtr"
+version = "0.0.0"
+rust_version = "1.56.0"
+edition = "2021"
+readme = "README.md"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+mtr_entities = { path = "./mtr_entities", package = "mtr_entities"}
+
+[dev-dependencies]
+
+[build-dependencies]

@@ -18,6 +18,8 @@ async fn main() -> anyhow::Result<()> {
 
     let application_service = application::Service::from(bank_account_repository);
 
+    let app = mtr::Application::new();
+
     tracing::info!("Service is starting up...");
 
     let addr = "0.0.0.0:10437"

@@ -1,6 +1,6 @@
 [package]
-name = "entities"
-version = "0.0.1"
+name = "mtr_entities"
+version = "0.0.0"
 publish = false
 
 [dependencies]
