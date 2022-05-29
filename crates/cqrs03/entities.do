@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+## Generate entities if migrations change
+#
+redo-ifchange migrations/src/mod.rs
+
 # NOTE:
 #       The seq-orm-cli commands need to be run before the cargo new - in case
 #       the workspace members list has been populated.  Otherwise
@@ -30,15 +34,23 @@ if [[ -z "${DATABASE_URL}" ]]; then
   exit 1
 fi
 
-# Remove migrate init when using cargo generate templates.
-sea-orm-cli migrate init
-# Relevant to templates - keep history in case someone prefers the past.
-sea-orm-cli migrate up
-
+export DATABASE_URL="postgres://postgres:secret@localhost:5432/ecommerce_development"
+for v in {0..38..1};
+do
+    echo "Migrate to version ${v}"
+    pushd migrations || return
+        refinery migrate -e DATABASE_URL -p ./src -t ${v} &>>refinery.log
+    popd || return
+    sea-orm-cli generate entity --database-url "${DATABASE_URL}" \
+                                --expanded-format \
+                                --with-serde both \
+                                --include-hidden-tables \
+                                --output-dir entities/src &>>entity.log
+    git add . &>>add.log
+    git commit -m "Evolve[DB]: Migrate to version ${v}" &>>commit.log
+done
 sea-orm-cli generate entity --database-url "${DATABASE_URL}" \
                             --expanded-format \
                             --with-serde both \
                             --include-hidden-tables \
                             --output-dir entities/src
-
-cargo new --lib rtm

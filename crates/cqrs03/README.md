@@ -16,7 +16,7 @@ do
 done
 ```
 
-Moved to the `migration` folder, entity files are generated for each migration
+Moved to the `migrations` folder, entity files are generated for each migration
 version:
 
 ```bash

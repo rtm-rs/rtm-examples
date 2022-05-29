@@ -14,12 +14,14 @@ This example application should be useful for people interested in:
 
 ### Usage
 
-We'll use gRPCui to interact with the service:
+We'll use [gRPCui](https://github.com/fullstorydev/grpcui) to interact with the
+service:
 
 ```bash
-podman run -it --rm --network="host" \
-           -v $(pwd)/proto:/protos \
-           -eGRPCUI_SERVER=localhost:10437 \
-           -p8091:8080 \
-           fullstorydev/grpcui localhost:10437
+podman run --interactive \
+           --tty \
+           --rm \
+           --network="host" \
+           --volume $(pwd)/proto:/protos \
+           fullstorydev/grpcui -plaintext localhost:10437
 ```
