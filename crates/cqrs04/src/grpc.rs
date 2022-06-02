@@ -11,18 +11,20 @@ use crate::{
 };
 
 #[derive(Clone)]
-pub struct BankAccountingApi<R>
+pub struct BankAccountingApi<AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
+    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
+    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
 {
-    application_service: application::Service<R>,
+    application_service: application::Service<BankAccount, BankAccountRoot, AR>,
 }
 
-impl<R> From<application::Service<R>> for BankAccountingApi<R>
+impl<AR> From<application::Service<BankAccount, BankAccountRoot, AR>> for BankAccountingApi<AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
+    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
+    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
 {
-    fn from(application_service: application::Service<R>) -> Self {
+    fn from(application_service: application::Service<BankAccount, BankAccountRoot, AR>) -> Self {
         Self {
             application_service,
         }
@@ -32,8 +34,10 @@ where
 #[async_trait]
 impl<R> proto::bank_accounting_server::BankAccounting for BankAccountingApi<R>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot> + 'static,
-    R::Error: StdError + Send + Sync + 'static,
+    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
+    //R: eventually::event::Store<StreamId = BankAccount::Id, Event = BankAccount::Event> + 'static,
+    R: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event> + 'static,
+    //R::Error: StdError + Send + Sync + 'static,
 {
     async fn open_bank_account(
         &self,

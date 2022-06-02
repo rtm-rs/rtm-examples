@@ -2,28 +2,90 @@ use std::error::Error as StdError;
 
 use async_trait::async_trait;
 use eventually::{aggregate, command, message};
+use eventually::test::store::InMemory;
+use eventually::aggregate::EventSourced;
 use rust_decimal::Decimal;
 
 use crate::domain::{
     BankAccount, BankAccountHolderId, BankAccountId, BankAccountRoot, Transaction,
 };
+use crate::domain::BankAccountRepository;
+use crate::domain::BankAccountEvent;
+use std::marker::PhantomData;
 
 #[derive(Clone)]
-pub struct Service<R>
+pub struct Service<A, R, AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
+    AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>,
+    // R: aggregate::Repository<BankAccount, BankAccountRoot> + eventually::event::Store,
+    A: eventually::aggregate::Aggregate,
+    R: eventually::aggregate::Root<A>,
+    //Self: std::convert::From<EventSourced<BankAccount, BankAccountRoot, InMemory<String, BankAccountEvent>>>,
+
+    // R: std::convert::From<EventSourced<BankAccount, BankAccountRoot, InMemory<String, BankAccountEvent>>>
+    // R: std::convert::From<EventSourced<BankAccount, BankAccountRoot, R>>
 {
-    bank_account_repository: R,
+    _marker: PhantomData<(A,R)>,
+    bank_account_repository: AR,
 }
 
-impl<R> From<R> for Service<R>
+#[allow(unused_qualifications)]
+impl<A, R, AR> std::convert::From<EventSourced<A, R, AR>> for Service<A, R, AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
+    AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>,
+    A: eventually::aggregate::Aggregate,
+    R: eventually::aggregate::Root<A>,
+    //R: aggregate::Repository<BankAccount, BankAccountRoot> + eventually::event::Store,
+    //R: std::convert::From<EventSourced<BankAccount, BankAccountRoot, R>>
 {
-    fn from(bank_account_repository: R) -> Self {
+    fn from(bank_account_repository: EventSourced<A, R, AR>) -> Self
+    where
+      A: eventually::aggregate::Aggregate,
+      R: eventually::aggregate::Root<A>,
+      AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>,
+    {
         Self {
+            _marker: Default::default(),
             bank_account_repository,
         }
+    }
+}
+
+// #[allow(unused_qualifications)]
+// impl<A, R, AR> std::convert::From<AR> for Service<A, R, AR>
+// where
+//     A: eventually::aggregate::Aggregate,
+//     R: eventually::aggregate::Root<A>,
+//     AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>, //eventually::aggregate::Repository<A,R> + eventually::event::Store,
+//     //R: aggregate::Repository<BankAccount, BankAccountRoot> + eventually::event::Store,
+//     //R: std::convert::From<EventSourced<BankAccount, BankAccountRoot, R>>
+// {
+//     fn from(bank_account_repository: AR) -> Self
+//     where
+//       A: eventually::aggregate::Aggregate,
+//       R: eventually::aggregate::Root<A>,
+//       AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>,
+//     {
+//         Self {
+//             _marker: Default::default(),
+//             bank_account_repository,
+//         }
+//     }
+// }
+
+impl<A, R, AR> Service<A, R, AR>
+where
+    A: eventually::aggregate::Aggregate,
+    R: eventually::aggregate::Root<A>,
+    AR: eventually::event::Store<StreamId = A::Id, Event = A::Event>,
+    //R: aggregate::Repository<BankAccount, BankAccountRoot> + eventually::event::Store,
+    //R: std::convert::From<EventSourced<BankAccount, BankAccountRoot, R>>
+{
+    fn new() -> Self {
+        let event_store = eventually::test::store::InMemory::default();
+        let repository = BankAccountRepository::from(event_store.clone());
+        let application = Self::from(repository);
+        application
     }
 }
 
@@ -41,10 +103,12 @@ impl message::Message for OpenBankAccount {
 }
 
 #[async_trait]
-impl<R> command::Handler<OpenBankAccount> for Service<R>
+impl<AR> command::Handler<OpenBankAccount> for Service<BankAccount, BankAccountRoot, AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
-    R::Error: StdError + Send + Sync + 'static,
+    //A: eventually::aggregate::Aggregate,
+    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
+    //AR: aggregate::Repository<BankAccount, BankAccountRoot>,
+    //AR::Error: StdError + Send + Sync + 'static,
 {
     type Error = anyhow::Error;
 
@@ -78,10 +142,12 @@ impl message::Message for DepositInBankAccount {
 }
 
 #[async_trait]
-impl<R> command::Handler<DepositInBankAccount> for Service<R>
+impl<AR> command::Handler<DepositInBankAccount> for Service<BankAccount, BankAccountRoot, AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
-    R::Error: StdError + Send + Sync + 'static,
+    //A: eventually::aggregate::Aggregate,
+    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
+    //AR: aggregate::Repository<BankAccount, BankAccountRoot>,
+    //AR::Error: StdError + Send + Sync + 'static,
 {
     type Error = anyhow::Error;
 
@@ -120,10 +186,12 @@ impl message::Message for SendTransferToBankAccount {
 }
 
 #[async_trait]
-impl<R> command::Handler<SendTransferToBankAccount> for Service<R>
+impl<AR> command::Handler<SendTransferToBankAccount> for Service<BankAccount, BankAccountRoot, AR>
 where
-    R: aggregate::Repository<BankAccount, BankAccountRoot>,
-    R::Error: StdError + Send + Sync + 'static,
+    //A: eventually::aggregate::Aggregate,
+    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
+    //AR: aggregate::Repository<BankAccount, BankAccountRoot>,
+    //AR::Error: StdError + Send + Sync + 'static,
 {
     type Error = anyhow::Error;
 

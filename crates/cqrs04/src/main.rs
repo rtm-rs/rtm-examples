@@ -15,10 +15,9 @@ async fn main() -> anyhow::Result<()> {
 
     let bank_account_event_store = test::store::InMemory::default();
     let bank_account_repository = BankAccountRepository::from(bank_account_event_store.clone());
-
     let application_service = application::Service::from(bank_account_repository);
 
-    let app = mtr::Application::new();
+    let app = application::Service::new();
 
     tracing::info!("Service is starting up...");
 
@@ -43,6 +42,8 @@ async fn main() -> anyhow::Result<()> {
     let layer = tower::ServiceBuilder::new()
         .timeout(Duration::from_secs(5))
         .into_inner();
+
+    tracing::info!("Service is started on: 0.0.0.0:10437");
 
     tonic::transport::Server::builder()
         .layer(layer)
