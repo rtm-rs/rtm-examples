@@ -2,8 +2,6 @@
 #![deny(clippy::all)]
 // #![warn(clippy::pedantic)]
 
-pub mod application;
-pub mod domain;
 pub mod grpc;
 
 #[allow(unused_qualifications)]

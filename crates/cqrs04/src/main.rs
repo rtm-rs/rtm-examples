@@ -3,7 +3,10 @@ use std::time::Duration;
 use anyhow::anyhow;
 use eventually::test;
 
-use cqrs04::{application, domain::BankAccountRepository, grpc, proto};
+use cqrs04::{grpc, proto};
+
+use mtr::application;
+use mtr::domain::BankAccountRepository;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -16,8 +19,6 @@ async fn main() -> anyhow::Result<()> {
     let bank_account_event_store = test::store::InMemory::default();
     let bank_account_repository = BankAccountRepository::from(bank_account_event_store.clone());
     let application_service = application::Service::from(bank_account_repository);
-
-    let app = application::Service::new();
 
     tracing::info!("Service is starting up...");
 

@@ -4,27 +4,23 @@ use async_trait::async_trait;
 use eventually::{aggregate, command::Handler, version};
 use rust_decimal::{prelude::FromPrimitive, Decimal};
 
-use crate::{
-    application,
-    domain::{BankAccount, BankAccountError, BankAccountRoot},
-    proto,
-};
+use crate::proto;
+use mtr::application;
+use mtr::domain::{BankAccount, BankAccountError, BankAccountRoot};
 
 #[derive(Clone)]
-pub struct BankAccountingApi<AR>
+pub struct BankAccountingApi<R>
 where
-    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
-    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
+    R: aggregate::Repository<BankAccount, BankAccountRoot>,
 {
-    application_service: application::Service<BankAccount, BankAccountRoot, AR>,
+    application_service: application::Service<R>,
 }
 
-impl<AR> From<application::Service<BankAccount, BankAccountRoot, AR>> for BankAccountingApi<AR>
+impl<R> From<application::Service<R>> for BankAccountingApi<R>
 where
-    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
-    AR: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event>,
+    R: aggregate::Repository<BankAccount, BankAccountRoot>,
 {
-    fn from(application_service: application::Service<BankAccount, BankAccountRoot, AR>) -> Self {
+    fn from(application_service: application::Service<R>) -> Self {
         Self {
             application_service,
         }
@@ -34,10 +30,8 @@ where
 #[async_trait]
 impl<R> proto::bank_accounting_server::BankAccounting for BankAccountingApi<R>
 where
-    //AR: eventually::aggregate::Repository<BankAccount, BankAccountRoot>,
-    //R: eventually::event::Store<StreamId = BankAccount::Id, Event = BankAccount::Event> + 'static,
-    R: eventually::event::Store<StreamId = <BankAccount as eventually::aggregate::Aggregate>::Id, Event = <BankAccount as eventually::aggregate::Aggregate>::Event> + 'static,
-    //R::Error: StdError + Send + Sync + 'static,
+    R: aggregate::Repository<BankAccount, BankAccountRoot> + 'static,
+    R::Error: StdError + Send + Sync + 'static,
 {
     async fn open_bank_account(
         &self,
