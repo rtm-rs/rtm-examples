@@ -7,6 +7,7 @@ use rust_decimal::Decimal;
 use crate::domain::{
     BankAccount, BankAccountHolderId, BankAccountId, BankAccountRoot, Transaction,
 };
+use mtr_account::BankAccount;
 
 #[derive(Clone)]
 pub struct Service<R>

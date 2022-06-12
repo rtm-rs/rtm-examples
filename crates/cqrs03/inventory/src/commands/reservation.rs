@@ -10,17 +10,17 @@
 // ```
 // The item passed to my proc macro is
 // `mod some_mod { fn foo() { } fn bar() { } }`
-// this is rewritten, removing the placeholder `some_mod` 
+// this is rewritten, removing the placeholder `some_mod`
 mod reservation {
     #![rtm(aggregate = Reservation)]
 
-    #[derive(Create, Update, Delete)]
+    #[derive(Create, Delete, Update)]
     #[rtm(aggregate = Reservation)]
     struct Reservation;
 
-    type UpdatedError = Error;
-    type DeletedError = Error;
     type CreatedError = Error;
+    type DeletedError = Error;
+    type UpdatedError = Error;
 
     fn is_created(&self) {
         if !self.state.is_some() {
